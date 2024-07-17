@@ -21,9 +21,14 @@ namespace livox_ring{
 	void LivoxConvert::cloudCallback(const sensor_msgs::msg::PointCloud2::SharedPtr msg_){
 		sensor_msgs::msg::PointCloud2 new_cloud;
 
+		new_cloud.header.stamp = msg_->header.stamp;
 		new_cloud.header.frame_id = "livox_frame";
 		new_cloud.height = msg_->height;
 		new_cloud.width = msg_->width;
+		new_cloud.is_bigendian = msg_->is_bigendian;
+		new_cloud.point_step = msg_->point_step;
+		new_cloud.row_step = msg_->row_step;
+		new_cloud.is_dense = msg_->is_dense;
 		new_cloud.fields.resize(6);
 		new_cloud.fields[0].offset = 0;
 		new_cloud.fields[0].name = "x";
@@ -50,14 +55,14 @@ namespace livox_ring{
 		new_cloud.fields[4].count = 1;
 		new_cloud.fields[4].datatype = sensor_msgs::msg::PointField::UINT16;
 	
-		new_cloud.fields[0].offset = 18;
-		new_cloud.fields[0].name = "time";
-		new_cloud.fields[0].count = 1;
-		new_cloud.fields[0].datatype = sensor_msgs::msg::PointField::FLOAT64;
+		new_cloud.fields[5].offset = 18;
+		new_cloud.fields[5].name = "time";
+		new_cloud.fields[5].count = 1;
+		new_cloud.fields[5].datatype = sensor_msgs::msg::PointField::FLOAT64;
 
 		new_cloud.data = msg_->data;
 
-		new_cloud.point_step = 24;
+		new_cloud.point_step = 26;
 
 		cloud_pub->publish(new_cloud);
 	}
